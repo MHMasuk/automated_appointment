@@ -3,6 +3,7 @@ import sys
 from time import sleep, time
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 from scrapers.scraper import connect_to_base, get_driver
 
 
@@ -25,11 +26,16 @@ def run_process(browser):
         ok_btn.click()
         sleep(2)
 
-        sleep(5)
 
         make_reservation_btn = browser.find_element(By.XPATH, '//*[@class="infoTable"]//tr//td//a')
         make_reservation_btn.click()
+        sleep(2)
 
+        select = Select(browser.find_element(By.XPATH, '//select[@id="calendar.consularPost.consularPost"]'))
+        select.select_by_visible_text("Baku")
+        ok_btn = browser.find_element(By.XPATH, "//font[text()='OK']")
+        ok_btn.click()
+        sleep(2)
 
 
     else:
