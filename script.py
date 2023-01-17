@@ -20,22 +20,40 @@ def run_process(browser):
         password_input = browser.find_element(By.XPATH, "//input[@id='j_password']")
         username_input.send_keys("uhuuewhuuos")
         password_input.send_keys("B00078734")
-        sleep(2)
+        # sleep(2)
 
         ok_btn = browser.find_element(By.XPATH, "//*[@class='pointer']")
         ok_btn.click()
-        sleep(2)
+        # sleep(2)
 
 
         make_reservation_btn = browser.find_element(By.XPATH, '//*[@class="infoTable"]//tr//td//a')
         make_reservation_btn.click()
-        sleep(2)
+        # sleep(2)
 
         select = Select(browser.find_element(By.XPATH, '//select[@id="calendar.consularPost.consularPost"]'))
         select.select_by_visible_text("Baku")
         ok_btn = browser.find_element(By.XPATH, "//font[text()='OK']")
         ok_btn.click()
-        sleep(2)
+        # sleep(2)
+
+        date_click = browser.find_elements(By.XPATH, '//*[@class="calendarMonthCell"]//strong')[1]
+        date_click.click()
+        # sleep(2)
+
+        slot_click = browser.find_elements(By.XPATH, '//*[@class="calendarDayTableRow"]')[1]
+        slot_click.click()
+        sleep(6)
+
+        # captcha_input = browser.find_element(By.XPATH, '//*[@id="captcha"]')
+        # captcha_input.send_keys("2ydrw")
+        # sleep(2)
+
+        captcha_input = browser.find_elements(By.XPATH, '//*[@class="pointer"]')[7]
+        print(captcha_input.text)
+        captcha_input.click()
+        sleep(8)
+
 
 
     else:
