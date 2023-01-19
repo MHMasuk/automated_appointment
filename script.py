@@ -1,5 +1,6 @@
 import datetime
 import sys
+import requests
 from time import sleep, time
 
 from selenium.webdriver.common.by import By
@@ -20,31 +21,78 @@ def run_process(browser):
         password_input = browser.find_element(By.XPATH, "//input[@id='j_password']")
         username_input.send_keys("uhuuewhuuos")
         password_input.send_keys("B00078734")
-        # sleep(2)
+        sleep(2)
 
-        ok_btn = browser.find_element(By.XPATH, "//*[@class='pointer']")
-        ok_btn.click()
-        # sleep(2)
+        # ok_btn = browser.find_element(By.XPATH, "//*[@class='pointer']")
+        # ok_btn.click()
+        # # sleep(2)
+        #
+        #
+        # make_reservation_btn = browser.find_element(By.XPATH, '//*[@class="infoTable"]//tr//td//a')
+        # make_reservation_btn.click()
+        # # sleep(2)
+        #
+        # select = Select(browser.find_element(By.XPATH, '//select[@id="calendar.consularPost.consularPost"]'))
+        # select.select_by_visible_text("Baku")
+        # ok_btn = browser.find_element(By.XPATH, "//font[text()='OK']")
+        # ok_btn.click()
+        # # sleep(2)
+        #
+        # date_click = browser.find_elements(By.XPATH, '//*[@class="calendarMonthCell"]//strong')[1]
+        # date_click.click()
+        # # sleep(2)
+        #
+        # slot_click = browser.find_elements(By.XPATH, '//*[@class="calendarDayTableRow"]')[1]
+        # slot_click.click()
+        # sleep(6)
+        #
+        # Extract the cookies from the browser
+        cookies = browser.get_cookies()
 
+        # Create a session
+        session = requests.session()
 
-        make_reservation_btn = browser.find_element(By.XPATH, '//*[@class="infoTable"]//tr//td//a')
-        make_reservation_btn.click()
-        # sleep(2)
+        # Add the cookies to the session
+        for cookie in cookies:
+            session.cookies.update({cookie['name']: cookie['value']})
 
-        select = Select(browser.find_element(By.XPATH, '//select[@id="calendar.consularPost.consularPost"]'))
-        select.select_by_visible_text("Baku")
-        ok_btn = browser.find_element(By.XPATH, "//font[text()='OK']")
-        ok_btn.click()
-        # sleep(2)
+        print("cookies", cookies)
+        print("session", session)
 
-        date_click = browser.find_elements(By.XPATH, '//*[@class="calendarMonthCell"]//strong')[1]
-        date_click.click()
-        # sleep(2)
+        # https://ezov.mzv.sk/e-zov/calendarDay.do?day=19.01.2023&timeSlotId=&calendarId=&consularPostId=1070
+        # calendar.timeOfVisit:
+        # 19.01
+        # .2023
+        # 10: 00
+        # calendar.sequenceNo:
+        # 1
+        # calendar.timeSlot.timeSlotId:
+        # calendar.consularPost.consularPost:
+        # 1070
+        # calendar.calendarId:
+        # captcha:
+        # 82
+        # ckh
 
-        slot_click = browser.find_elements(By.XPATH, '//*[@class="calendarDayTableRow"]')[1]
-        slot_click.click()
-        sleep(6)
+        # The URL to send the POST request to
+        url = 'https://ezov.mzv.sk/e-zov/calendarDay.do?day=19.01.2023&timeSlotId=&calendarId=&consularPostId=1070'
 
+        # The data to include in the POST request
+        data = {
+            'calendar.timeOfVisit': '19.01.2023 10:00',
+            'calendar.sequenceNo': '1',
+            'calendar.timeSlot.timeSlotId': None,
+            'calendar.consularPost.consularPost': 1070,
+            'calendar.calendarId:': None,
+            'captcha': "82ckh"
+        }
+
+        # Send the POST request
+        response = session.post(url, json=data)
+        # response = session.get(url)
+
+        # Print the response
+        print(response.text)
         # captcha_input = browser.find_element(By.XPATH, '//*[@id="captcha"]')
         # captcha_input.send_keys("2ydrw")
         # sleep(2)
